@@ -8,7 +8,9 @@
 | Each array key should be a role slug, using underscores instead of spaces,
 | you should try and keep these simple and lowercase.
 |
-|
+| !!! IF YOU HAVE SANCTION'S CACHING ENABLED REMEMBER TO RUN:
+| php artisan sanction:cleanup
+| TO CLEAR THE CACHE AFTER EACH TIME YOU EDIT THIS FILE !!!
 |
 | The value of each item should be an array with the following keys:
 |

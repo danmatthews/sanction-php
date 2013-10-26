@@ -121,9 +121,13 @@ This will allow to use the following methods:
 
 <tr><td><code>$user->hasPermission($permission_name)</code></td><td>Verify a user has a permission.</td></tr>
 
-<tr><td><code>$user->hasPermissions(array $permissions)</code></td><td>An array of permissions names, will only return true if a user has **all** of these.</td></tr>
+<tr><td><code>$user->hasPermissions(array $permissions)</code></td><td>An array of permissions names, will only return true if a user has <strong>all</strong> of these.</td></tr>
 
 <tr><td><code>$user->getRoles()</code></td><td>Returns the list of roles associated with the user, if any.</td></tr>
+
+<tr><td><code>$user->getPermissions()</code></td><td>Returns the list of permissions associated with the user, if any.</td></tr>
+
+
 
 </table>
 
