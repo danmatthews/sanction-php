@@ -211,7 +211,7 @@ This will allow to use the following methods:
 
 </table>
 
->Remember that to use this extension, your model must **directly** extend the `Eloquent` class, and be using ID as the primary key.
+>Remember that to use this extension, your model must **directly** extend the `Eloquent` class, and be using `id` as the primary key.
 
 #### Clear the permissions cache with Artisan
 
