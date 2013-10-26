@@ -7,6 +7,6 @@ return array(
      * your permissions config, you will need to run
      * `php artisan permissions:refresh`
      */
-    'cache_provider' => null,//'Curlymoustache\Sanction\Cache\LaravelSanctionCacheProvider',
+    'cache_provider' => 'Curlymoustache\Sanction\Cache\LaravelSanctionCacheProvider',
     'role_lookup_provider' => 'Curlymoustache\Sanction\RoleLookup\LaravelDatabaseLookupProvider',
 );

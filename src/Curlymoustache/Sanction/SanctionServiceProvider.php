@@ -29,6 +29,10 @@ class SanctionServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		$this->app['sanction.cleanup'] = $this->app->share(function() {
+			return new \Curlymoustache\Sanction\Commands\SanctionCommand;
+		});
+		$this->commands('sanction.cleanup');
 		$this->app->singleton('sanction', function()
 		{
 

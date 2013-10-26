@@ -190,6 +190,15 @@ class Sanction {
         }
     }
 
+    public function clearCache()
+    {
+        if ($this->cacheProvider instanceof SanctionCacheProviderInterface) {
+            return $this->cacheProvider->delete();
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Can a user with the ID of $id access the $permission?
      * @param  int $user_id
@@ -226,7 +235,7 @@ class Sanction {
      */
     public function getRolesForUserId($user_id)
     {
-        return $this->roleLookupProvider->getRolesForUserId($user_id)
+        return $this->roleLookupProvider->getRolesForUserId($user_id);
     }
 
     /**
