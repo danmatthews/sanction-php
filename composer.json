@@ -1,6 +1,6 @@
 {
     "name": "curlymoustache/sanction",
-    "description": "A",
+    "description": "A PHP Permissions and role-based access control library, with plenty of flexibility and ability to extend and replace components.",
     "keywords": ["laravel", "acl", "permissions"],
     "license": "MIT",
     "authors": [
