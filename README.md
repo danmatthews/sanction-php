@@ -69,7 +69,7 @@ $sanction = new Sanction(
 $sanction->userHasPermission(32, 'create_users'); // TRUE
 
 // But not delete them:
-$sanction->userHasPermission(32, 'delete_users'); // TRUE
+$sanction->userHasPermission(32, 'delete_users'); // FALSE
 
 // Where as Jim can delete them:
 $sanction->userHasPermission(10, 'delete_users'); // TRUE
