@@ -3,7 +3,7 @@
 use Zend\Permissions\Acl\Acl as Acl;
 use Zend\Permissions\Acl\Role\GenericRole as Role;
 use Curlymoustache\Sanction\Cache\SanctionCacheProviderInterface as SanctionCacheProviderInterface;
-use Curlymoustache\Sanction\RoleLookup\RoleLookupProviderInterface as RoleLookupProviderInterface;
+use Curlymoustache\Sanction\RoleLookup\SanctionRoleLookupProviderInterface as SanctionRoleLookupProviderInterface;
 
 class Sanction {
 
@@ -27,7 +27,7 @@ class Sanction {
 
     /**
      * A role lookup provider that allows looking up role names for user IDs.
-     * @var Curlymoustache\Sanction\RoleLookup\SanctionRoleLookupProvider
+     * @var Curlymoustache\Sanction\RoleLookup\SanctionRoleLookupProviderInterface
      */
     protected $roleLookupProvider;
 
@@ -170,12 +170,38 @@ class Sanction {
         }
     }
 
+
+    /**
+     * Get a list of permissions for a particular user ID.
+     * @param  int $user_id
+     * @return array
+     */
+    public function getPermissionsForUserId($user_id) {
+
+        $roles = $this->roleLookupProvider->getRolesForUserId($user_id);
+
+        $permissions = [];
+
+        foreach ($roles as $role) {
+            $permissions = array_merge($permissions, $this->roles[$role]['permissions']);
+        }
+
+        return $permissions;
+    }
+
     /**
      * Set cache provider
      */
     public function setCacheProvider(SanctionCacheProviderInterface $provider)
     {
         $this->cacheProvider = $provider;
+    }
+
+    public function getRoleLookupProvider()
+    {
+        if ($this->roleLookupProvider instanceof SanctionRoleLookupProviderInterface) {
+            return $this->roleLookupProvider;
+        }
     }
 
     /**
@@ -218,6 +244,37 @@ class Sanction {
     }
 
     /**
+     * Can a user with the ID of $id access ALL the $permissions?
+     * @param  int $user_id
+     * @param  array $permissions
+     * @return bool
+     */
+    public function userHasPermissions($user_id, array $permissions)
+    {
+
+        // Implement role lookup here.
+        $roles = $this->getRolesForUserId((int)$user_id);
+
+        $count = 0;
+
+        foreach($permissions as $permission) {
+            if ($this->userHasPermission($user_id, (string)$permission)) {
+                $count++;
+            }
+        }
+        return $count == count($permissions) ? true : false;
+    }
+
+    /**
+     * Use this to check that role exists.
+     * @return bool
+     */
+    public function roleExists($role_id)
+    {
+        return (bool)$this->zendAcl->getRole($role_id);
+    }
+
+    /**
      * Can a particular role access a permission?
      * @param  string $role
      * @param  string $permission
@@ -236,6 +293,11 @@ class Sanction {
     public function getRolesForUserId($user_id)
     {
         return $this->roleLookupProvider->getRolesForUserId($user_id);
+    }
+
+    public function getUsersForRoleId($role_id)
+    {
+        return $this->roleLookupProvider->getUsersForRoleId($role_id);
     }
 
     /**
