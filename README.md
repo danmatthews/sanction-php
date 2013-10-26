@@ -69,7 +69,7 @@ This will make calls to `Sanction::methodName()` possible.
 Sanction provides a handy artisan command to clear the cache, if you're using the default `LaravelSanctionCacheProvider`:
 
 ```
-$ php artisan sanction:clean
+$ php artisan sanction:cleanup
 ```
 
 ## Example rules
