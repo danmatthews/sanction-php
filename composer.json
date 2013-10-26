@@ -2,7 +2,7 @@
     "name": "curlymoustache/sanction",
     "description": "A",
     "keywords": ["laravel", "acl", "permissions"],
-    "license": "MIT"
+    "license": "MIT",
     "authors": [
         {
             "name": "Dan Matthews",

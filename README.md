@@ -50,7 +50,7 @@ If you want to make the copy of composer 'global', then you can move the file to
 $ sudo mv composer.phar /usr/local/bin/composer
 ```
 
-### Using Laravel 4?
+### Getting Started Using Laravel 4
 
 Sanction and Laravel 4 are the best of friends! Add the following to your `app/config/app.php` file, at the end of the `$providers` array:
 
@@ -66,9 +66,67 @@ Then add the following alias to the `$aliases` array:
 
 This will make calls to `Sanction::methodName()` possible.
 
-#### Artisan commands
+#### Publish the config files
+
+*Now **publish the config files**, this is needed*:
+
+```
+php artisan config:publish curlymoustache/sanction
+```
+
+You should now be able to open `app/config/packages/curlymoustache/sanction/roles.php` and `app/config/packages/curlymoustache/sanction/config.php`.
+
+There! Now you can add your role definitions into the `roles.php` config file.
+
+#### Run the migration
+
+Run the migration from the package, this will install a `roles` table into your database, allowing you to persist role information for users.
+
+Simply run:
+
+```
+$ php artisan migrate --package="curlymoustache/sanction"
+```
+
+#### Eloquent Extension
+
+Are you using the default `Eloquent` user model? Good news then! There's a PHP Trait that you can include into your `User` model to enable some shortcuts.
+
+Just `use` the trait in your User model:
+
+```php
+use Illuminate\Auth\UserInterface;
+use Illuminate\Auth\Reminders\RemindableInterface;
+
+class User extends Eloquent implements UserInterface, RemindableInterface {
+
+    use Curlymoustache\Sanction\Extensions\EloquentExtension;
+
+...
+```
+
+This will allow to use the following methods:
+
+<table>
+<tr>
+    <td>
+    <code>usersWithRole($role_id)</code></td><td>Return an eloquent collection of users with a particular role.</td>
+</tr>
+
+</table>
+
+`$user->addRole($role_id)` - Add a role to the current instance of `User`
+
+`$user->deleteRole($role_id)` - Delete a role from the current instance of `User`.
+
+`$user->hasPermission($permission_name)` - Verify a user has a permission.
+
+`$user->hasPermissions(array $permissions)` - An array of permissions names, will only return true if a user has **all** of these.
+
+#### Clear the permissions cache with Artisan
 
 Sanction provides a handy artisan command to clear the cache, if you're using the default `LaravelSanctionCacheProvider`:
+
 
 ```
 $ php artisan sanction:cleanup
@@ -99,7 +157,5 @@ return array(
     ),
 );
 ```
-
-## Installation
 
 **More coming soon, stay tuned**
