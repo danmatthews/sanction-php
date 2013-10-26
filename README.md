@@ -108,20 +108,25 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 This will allow to use the following methods:
 
 <table>
+<tr><th>Method</th><th>Description</th>
 <tr>
     <td>
     <code>usersWithRole($role_id)</code></td><td>Return an eloquent collection of users with a particular role.</td>
 </tr>
 
+
+<tr><td><code>$user->addRole($role_id)</code></td><td>Add a role to the current instance of `User`</td></tr>
+
+<tr><td><code>$user->deleteRole($role_id)</code></td><td>Delete a role from the current instance of `User`.</td></tr>
+
+<tr><td><code>$user->hasPermission($permission_name)</code></td><td>Verify a user has a permission.</td></tr>
+
+<tr><td><code>$user->hasPermissions(array $permissions)</code></td><td>An array of permissions names, will only return true if a user has **all** of these.</td></tr>
+
+<tr><td><code>$user->getRoles()</code></td><td>Returns the list of roles associated with the user, if any.</td></tr>
+
 </table>
 
-`$user->addRole($role_id)` - Add a role to the current instance of `User`
-
-`$user->deleteRole($role_id)` - Delete a role from the current instance of `User`.
-
-`$user->hasPermission($permission_name)` - Verify a user has a permission.
-
-`$user->hasPermissions(array $permissions)` - An array of permissions names, will only return true if a user has **all** of these.
 
 #### Clear the permissions cache with Artisan
 
