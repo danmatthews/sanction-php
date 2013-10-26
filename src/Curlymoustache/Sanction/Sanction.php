@@ -204,6 +204,10 @@ class Sanction {
         }
     }
 
+    public function setRoleLookupProvider(SanctionRoleLookupProviderInterface $provider) {
+        $this->roleLookupProvider = $provider;
+    }
+
     /**
      * Get cache provider
      */

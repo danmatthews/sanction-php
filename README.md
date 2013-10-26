@@ -8,6 +8,74 @@ Declare a list of roles, the permissions they can access, and any other roles th
 
 Attaching roles to users is your job, this merely sets what they *can* do once they're attached - But we provide some helpers for Laravel (and hopefully some more generic stuff soon too).
 
+## Basic Usage
+
+Let's say we have a user management app, with two roles defined, *standard_user*, and *admin*. Our *standard_user* can create and update users, but our *administrator_user* can also delete users, as well as creating and updating them.
+
+```php
+<?php # rules.config.php
+
+return [
+    'standard_user' => [
+        'permissions' => [
+            'create_users',
+            'update_users',
+        ],
+    ],
+    'admin' => [
+        'permissions' => [
+            'delete_users',
+        ],
+        'inherits_from' => ['standard_user']
+    ],
+];
+```
+Apply these rules to an instance of Sanction:
+
+```php
+<?php
+use Curlymoustache\Sanction\Sanction;
+use Curlymoustache\Sanction\RoleLookup\SanctionArrayLookupProvider;
+
+$rules = include 'rules.config.php';
+
+// Build a really simple array of users
+$users = [
+    [
+        'uid' => 10,
+        'name' => 'Jim Kirk',
+        'roles' => ['admin']
+    ],
+    [
+        'uid' => 32,
+        'name' => 'Bones',
+        'roles' => ['standard_user']
+    ],
+];
+
+
+$sanction = new Sanction(
+    $rules,
+    null,
+    new SanctionArrayLookupProvider( // A simple array lookup class.
+        $users,
+        'uid' // Use `uid` as the unique user_id
+    )
+);
+
+// Now we can test these permissions to see if our rules hold true:
+
+// Bones should be able to create users;
+$sanction->userHasPermission(32, 'create_users'); // TRUE
+
+// But not delete them:
+$sanction->userHasPermission(32, 'delete_users'); // TRUE
+
+// Where as Jim can delete them:
+$sanction->userHasPermission(10, 'delete_users'); // TRUE
+
+```
+
 ## Features
 
 - Permission inheritance, you don't need to redeclare your permissions for each user, just tell them to inherit from a user with base permissions.
@@ -17,6 +85,18 @@ Attaching roles to users is your job, this merely sets what they *can* do once t
 ### Swappable integrations.
 
 Thanks to lovely the wonder of PHP `interface`, you can swap out the implementations of the `Cache` and `RoleLookup` parts of your application, meaning that this could potentially be used with any framework or CMS.
+
+#### Cache Providers
+
+To adjust Sanction to work with other frameworks or even just plain ol' PHP, you can create your own CacheProvider by implemting `Curlymoustache\Sanction\Cache\SanctionCacheProviderInterface` and ensuring it returns the right stuff.
+
+You can then set this as a new provider by calling `$sanction->setCacheProvider(new MyCustomCacheProvider);`
+
+#### Role Lookup Providers
+
+If you wish to change how Sanction looks for roles against users, you will need to implement a `RoleLookupProvider`, which you can do by creating a class that implements `Curlymoustache\Sanction\RoleLookup\SanctionRoleLookupProviderInterface`.
+
+You can then set this as a new provider by calling `$sanction->setRoleLookupProvider(new MyCustomLookupProvider);`
 
 ## Installation
 
@@ -111,7 +191,7 @@ This will allow to use the following methods:
 <tr><th>Method</th><th>Description</th>
 <tr>
     <td>
-    <code>usersWithRole($role_id)</code></td><td>Return an eloquent collection of users with a particular role.</td>
+    <code>User::usersWithRole($role_id)</code></td><td>Return an eloquent collection of users with a particular role.</td>
 </tr>
 
 
@@ -127,44 +207,19 @@ This will allow to use the following methods:
 
 <tr><td><code>$user->getPermissions()</code></td><td>Returns the list of permissions associated with the user, if any.</td></tr>
 
-
-
 </table>
 
+>Remember that to use this extension, your model must **directly** extend the `Eloquent` class, and be using ID as the primary key.
 
 #### Clear the permissions cache with Artisan
 
-Sanction provides a handy artisan command to clear the cache, if you're using the default `LaravelSanctionCacheProvider`:
+When you update `app/config/packages/curlymoustache/sanction/roles.php` with caching enabled in the config file, you will need to clear the permissions cache for your new rules to take effect.
+
+Sanction provides a handy artisan command to do so, this will call the `delete` method on whatever `cache_provider` you have setup in config.php.
 
 
 ```
 $ php artisan sanction:cleanup
-```
-
-## Example rules
-
-An example roles array (declared in a config file):
-
-```php
-<?php
-return array(
-    'standard_user' => array(
-        'display_name' => 'Standard User',
-        'permissions' => array(
-            'user.invite',
-        ),
-    ),
-    'admin' => array(
-        'display_name' => 'Administrator',
-        'inherits_from' => array(
-            'standard_user', // This allows them to user.invite too!
-        ),
-        'permissions' => array(
-            'user.delete',
-            'user.create',
-        ),
-    ),
-);
 ```
 
 **More coming soon, stay tuned**
