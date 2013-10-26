@@ -5,18 +5,7 @@ Not just another access control package for [Laravel 4](http://laravel.com),
 - Declare a list of permissions in a config file.
 - Declare a list of roles, the permissions they can access, and any other roles they inherit from as a config file.
 
-Example `permissions.php` config file:
-
-```php
-<?php
-return array(
-    'user.create' => 'Create a user',
-    'user.invite' => 'Invite a user',
-    'user.delete' => 'Delete a user',
-);
-```
-
-Then an example roles file:
+An example roles array:
 
 ```php
 <?php
@@ -40,4 +29,4 @@ return array(
 );
 ```
 
-- All your permissions are lowercased when they are imported from the config file.
+**More coming soon, stay tuned**
