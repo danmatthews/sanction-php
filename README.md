@@ -88,7 +88,7 @@ Thanks to lovely the wonder of PHP `interface`, you can swap out the implementat
 
 #### Cache Providers
 
-To adjust Sanction to work with other frameworks or even just plain ol' PHP, you can create your own CacheProvider by implemting `Curlymoustache\Sanction\Cache\SanctionCacheProviderInterface` and ensuring it returns the right stuff.
+To adjust Sanction to work with other frameworks or even just plain ol' PHP, you can create your own CacheProvider by implementing `Curlymoustache\Sanction\Cache\SanctionCacheProviderInterface` and ensuring it returns the right stuff.
 
 You can then set this as a new provider by calling `$sanction->setCacheProvider(new MyCustomCacheProvider);`
 
@@ -175,6 +175,8 @@ Are you using the default `Eloquent` user model? Good news then! There's a PHP T
 Just `use` the trait in your User model:
 
 ```php
+<?php
+
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
