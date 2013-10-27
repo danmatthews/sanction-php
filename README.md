@@ -193,17 +193,16 @@ This will allow to use the following methods:
 <tr><th>Method</th><th>Description</th>
 <tr>
     <td>
-    <code>User::usersWithRole($role_id)</code></td><td>Return an eloquent collection of users with a particular role.</td>
+    <code>User::usersWithRole($role_name)</code></td><td>Return an eloquent collection of users with a particular role.</td>
 </tr>
 
+<tr><td><code>$user->addRole($role_name)</code></td><td>Add a role to the current instance of `User`</td></tr>
 
-<tr><td><code>$user->addRole($role_id)</code></td><td>Add a role to the current instance of `User`</td></tr>
+<tr><td><code>$user->deleteRole($role_name)</code></td><td>Delete a role from the current instance of `User`.</td></tr>
 
-<tr><td><code>$user->deleteRole($role_id)</code></td><td>Delete a role from the current instance of `User`.</td></tr>
+<tr><td><code>$user->can($permission_names)</code></td><td>Verify a user has a permission (string) or multiple permissions (array).</td></tr>
 
-<tr><td><code>$user->hasPermission($permission_name)</code></td><td>Verify a user has a permission.</td></tr>
-
-<tr><td><code>$user->hasPermissions(array $permissions)</code></td><td>An array of permissions names, will only return true if a user has <strong>all</strong> of these.</td></tr>
+<tr><td><code>$user->is($role_name)</code></td><td>Returns true if the user has the role supplied.</td></tr>
 
 <tr><td><code>$user->getRoles()</code></td><td>Returns the list of roles associated with the user, if any.</td></tr>
 
@@ -211,7 +210,7 @@ This will allow to use the following methods:
 
 </table>
 
->Remember that to use this extension, your model must **directly** extend the `Eloquent` class, and be using `id` as the primary key.
+>Remember that to use this extension, your model *must* extend the `Eloquent` class, and be using `id` as the primary key.
 
 #### Clear the permissions cache with Artisan
 
@@ -222,6 +221,12 @@ Sanction provides a handy artisan command to do so, this will call the `delete` 
 
 ```
 $ php artisan sanction:cleanup
+```
+
+Or if you want to do it in your code somewhere, call:
+
+```php
+$sanction->getCacheProvider()->delete();
 ```
 
 **More coming soon, stay tuned**

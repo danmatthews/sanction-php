@@ -18,9 +18,17 @@ trait EloquentExtension {
         return parent::whereIn('id', $ids)->get();
     }
 
-    public function getRoles()
+    /**
+     * Return all roles for this user.
+     * @return array
+     */
+    public function roles()
     {
         return App::make('sanction')->getRolesForUserId($this->id);
+    }
+
+    public function is($role_name) {
+        return in_array($role_name, $this->roles());
     }
 
     /**
@@ -56,10 +64,24 @@ trait EloquentExtension {
      * @param  string  $permission
      * @return boolean
      */
-    public function hasPermission($permission)
+    protected function hasPermission($permission)
     {
         $sanction = App::make('sanction');
         return $sanction->userHasPermission($this->id, $permission);
+    }
+
+    /**
+     * Alias of hasPermission and hasPermissions
+     * @param  array|string $permission
+     * @return bool
+     */
+    public function can($permission)
+    {
+        if (is_array($permission)) {
+            return $this->hasPermissions($permission);
+        } else {
+            return $this->hasPermission($permission);
+        }
     }
 
     /**
@@ -67,7 +89,7 @@ trait EloquentExtension {
      * @param  string  $permission
      * @return boolean
      */
-    public function hasPermissions(array $permissions)
+    protected function hasPermissions(array $permissions)
     {
         $sanction = App::make('sanction');
         return $sanction->userHasPermissions($this->id, $permissions);
