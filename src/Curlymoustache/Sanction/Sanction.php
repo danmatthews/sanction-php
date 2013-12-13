@@ -41,8 +41,8 @@ class Sanction {
 
     public function getDisplayNameForRole($role)
     {
-        if (!empty($this->roles[$role])) {
-            return $this->roles[$role];
+        if (!empty($this->roles[$role]['display_name'])) {
+            return $this->roles[$role]['display_name'];
         } else {
             throw new Exception('RoleNotFoundException');
         }
@@ -60,7 +60,6 @@ class Sanction {
      */
     protected function validateAll()
     {
-
         foreach ($this->roles as $role_name => $data) {
 
             if (is_numeric($role_name)) {
@@ -103,13 +102,13 @@ class Sanction {
      * This function recursively adds dependent roles
      * based on the configuration.
      *
-     * @param [type] $name [description]
-     * @param [type] $data [description]
      */
     public function registerRole(&$acl, $name, $data)
     {
+
         $this->roles[$name]['instance'] = new Role($name);
-            $parents = [];
+
+        $parents = [];
 
          if (
             !empty($data['inherits_from']) &&
@@ -176,7 +175,8 @@ class Sanction {
      * @param  int $user_id
      * @return array
      */
-    public function getPermissionsForUserId($user_id) {
+    public function getPermissionsForUserId($user_id)
+    {
 
         $roles = $this->roleLookupProvider->getRolesForUserId($user_id);
 

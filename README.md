@@ -17,12 +17,14 @@ Let's say we have a user management app, with two roles defined, *standard_user*
 
 return [
     'standard_user' => [
+        'display_name' => 'Standard user',
         'permissions' => [
             'create_users',
             'update_users',
         ],
     ],
     'admin' => [
+        'display_name' => 'Administrator',
         'permissions' => [
             'delete_users',
         ],
