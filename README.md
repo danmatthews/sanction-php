@@ -2,6 +2,8 @@
 
 **Note: Requires PHP5.4+**
 
+[![Build Status](https://travis-ci.org/danmatthews/sanction-php.png?branch=develop)](https://travis-ci.org/danmatthews/sanction-php)
+
 Yep, another access control package for PHP, including some neat integration with [Laravel 4](http://laravel.com).
 
 Declare a list of roles, the permissions they can access, and any other roles they inherit from as a config array (or file, or whatever you like!), then let `Sanction` do the rest.
