@@ -88,7 +88,7 @@ class Sanction {
                         is_array($this->roles[$i]['inherits_from']) &&
                         in_array($role_name, $this->roles[$i]['inherits_from'])
                     ) {
-                        throw new \Exception("RoleCircularDependencyException");
+                        throw new \Curlymoustache\Sanction\Exceptions\RoleCircularDependencyException;
                     }
                 }
             }

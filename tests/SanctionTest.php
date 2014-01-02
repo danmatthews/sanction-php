@@ -27,6 +27,27 @@ class SanctionTest extends PHPUnit_Framework_TestCase {
 		];
 	}
 
+	public function getInvalidTestRulesCircularDepenency()
+	{
+		return [
+		    'standard_user' => [
+			    'display_name' => 'Standard user',
+		        'permissions' => [
+		            'create_users',
+		            'update_users',
+		        ],
+		        'inherits_from' => ['admin'],
+		    ],
+		    'admin' => [
+			    'display_name' => 'Administrator',
+		        'permissions' => [
+		            'delete_users',
+		        ],
+		        'inherits_from' => ['standard_user']
+		    ],
+		];
+	}
+
 	public function getTestUsers()
 	{
 		return [
@@ -92,9 +113,29 @@ class SanctionTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testValidateAll()
 	{
+
 		$lp = $this->setUpBaseLookupProvider();
-		$rules = [];
+
+		$rules = $this->getTestRules();
+
 		$sanction = new Curlymoustache\Sanction\Sanction($rules, null, $lp);
+
+		// If it passes the assertion, it didn't raise an exception, did it?
+		$this->assertInstanceOf('Curlymoustache\Sanction\Sanction', $sanction);
+	}
+
+	/**
+	 * Test for an exception being thrown when there are circular dependencies.
+	 *
+	 * @expectedException \Curlymoustache\Sanction\Exceptions\RoleCircularDependencyException
+	 * @return void
+	 */
+	public function testCircularDependenciesThrowException()
+	{
+		$rules = $this->getInvalidTestRulesCircularDepenency();
+		$lp = $this->setUpBaseLookupProvider();
+		$sanction = new Curlymoustache\Sanction\Sanction($rules, null, $lp);
+
 	}
 
 }
