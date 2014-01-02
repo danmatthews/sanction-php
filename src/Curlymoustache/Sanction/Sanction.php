@@ -63,11 +63,11 @@ class Sanction {
         foreach ($this->roles as $role_name => $data) {
 
             if (is_numeric($role_name)) {
-                throw new \Exception('MalformedRoleArrayStructureException');
+                throw new \Curlymoustache\Sanction\Exceptions\MalformedRoleArrayStructureException;
             }
 
             if (!is_array($data)) {
-                throw new \Exception('MalformedRoleArrayStructureException');
+                throw new \Curlymoustache\Sanction\Exceptions\MalformedRoleArrayStructureException;
             }
 
             if (
